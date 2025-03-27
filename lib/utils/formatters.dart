@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'constant.dart';
 
 class Formatters {
   static String formatPrice(double price) {
@@ -8,7 +9,7 @@ class Formatters {
 
   static String getImageUrl(String imagePath) {
     // Replace with your Laravel backend URL
-    const String baseUrl = 'http://127.0.0.1:8000/storage';
+    const String baseUrl = "$backendUrl/storage";
     // Handle storage path
     // if (imagePath.startsWith('storage/')) {
     return '$baseUrl/$imagePath';

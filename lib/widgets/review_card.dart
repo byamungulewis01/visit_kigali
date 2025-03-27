@@ -18,20 +18,15 @@ class ReviewCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(
-                  review.name,
+                Text('${review.name}',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const Spacer(),
-                CustomRatingBar(
-                  rating: review.rating.toDouble(),
-                  size: 16,
-                ),
+                CustomRatingBar(rating: review.rating.toDouble(), size: 16),
               ],
             ),
-            const SizedBox(height: 8),
             Text(review.content),
           ],
         ),

@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../models/review.dart';
 import '../services/api_service.dart';
 import '../widgets/custom_text_field.dart';
+import '../screens/place_list_screen.dart'; // Import the PlaceListScreen
 
 class ReviewScreen extends StatefulWidget {
   final int placeId;
@@ -17,8 +17,7 @@ class ReviewScreen extends StatefulWidget {
 class _ReviewScreenState extends State<ReviewScreen> {
   final _formKey = GlobalKey<FormState>();
   final _apiService = ApiService();
-  
-  final _nameController = TextEditingController();
+
   final _emailController = TextEditingController();
   final _contentController = TextEditingController();
   int _rating = 5;
@@ -36,7 +35,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
     try {
       final review = Review(
-        name: _nameController.text,
         email: _emailController.text,
         content: _contentController.text,
         rating: _rating,
@@ -49,10 +47,15 @@ class _ReviewScreenState extends State<ReviewScreen> {
         const SnackBar(content: Text('Review submitted successfully!')),
       );
 
-      Navigator.pop(context);
+      // Navigate to PlaceListScreen and remove all previous routes
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => PlaceListScreen()),
+        (route) => false,
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
+        SnackBar(content: Text('Review submission failed')),
       );
     } finally {
       setState(() {
@@ -74,16 +77,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              CustomTextField(
-                controller: _nameController,
-                label: 'Name',
-                validator: (value) {
-                  if (value == null || value.length < 4) {
-                    return 'Name must be at least 4 characters';
-                  }
-                  return null;
-                },
-              ),
               const SizedBox(height: 16),
               CustomTextField(
                 controller: _emailController,
@@ -141,7 +134,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   @override
   void dispose() {
-    _nameController.dispose();
     _emailController.dispose();
     _contentController.dispose();
     super.dispose();
